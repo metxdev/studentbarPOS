@@ -9,13 +9,13 @@ Luuakse veebipõhine POS-süsteem, mis võimaldab baaril hallata ja müüa erine
 
 | NR | Kirjeldus |
 |----|-----------|
-| **FR-01** | **Toote lisamine.** Kasutaja saab lisada uue toote koos kõigi vajalike väljadega. |
-| **FR-02** | **Toote muutmine.** Olemasolevat toodet saab muuta (nimi, kirjeldus, hind, staatus, kategooriad, kogus). |
-| **FR-03** | **Toote kustutamine.** Kasutaja saab toote menüüst eemaldada. |
-| **FR-04** | **Toote väljakutsumine / peitmine.** Toote saab ajutiselt müügist eemaldada ja hiljem tagasi kutsuda. |
-| **FR-05** | **Dünaamiline hinnastamine.** Süsteem kohandab toote hinda automaatselt müügistatistikast arvutatud populaarsuse alusel. |
-| **FR-06** | **Müügitehing.** Kasutaja saab toodet müüa; kogus väheneb ja tehing salvestatakse ajalukku. |
-| **FR-07** | **Müügistatistika.** Admin saab vaadata, mitu ühikut igast tootest on müüdud kindla perioodi jooksul. |
+ **Toote lisamine.** Kasutaja saab lisada uue toote koos kõigi vajalike väljadega. |
+ **Toote muutmine.** Olemasolevat toodet saab muuta (nimi, kirjeldus, hind, staatus, kategooriad, kogus). |
+ **Toote kustutamine.** Kasutaja saab toote menüüst eemaldada. |
+ **Toote väljakutsumine / peitmine.** Toote saab ajutiselt müügist eemaldada ja hiljem tagasi kutsuda. |
+ **Dünaamiline hinnastamine.** Süsteem kohandab toote hinda automaatselt müügistatistikast arvutatud populaarsuse alusel. |
+ **Müügitehing.** Kasutaja saab toodet müüa; kogus väheneb ja tehing salvestatakse ajalukku. |
+ **Müügistatistika.** Admin saab vaadata, mitu ühikut igast tootest on müüdud kindla perioodi jooksul. |
 
 ---
 
