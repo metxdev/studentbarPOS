@@ -7,7 +7,7 @@ Luuakse veebipõhine POS-süsteem, mis võimaldab baaril hallata ja müüa erine
 
 ## 2. Funktsionaalsed nõuded
 
-| NR | Kirjeldus |
+ Kirjeldus |
 |----|-----------|
  **Toote lisamine.** Kasutaja saab lisada uue toote koos kõigi vajalike väljadega. |
  **Toote muutmine.** Olemasolevat toodet saab muuta (nimi, kirjeldus, hind, staatus, kategooriad, kogus). |
