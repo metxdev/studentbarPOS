@@ -104,8 +104,5 @@ Luuakse veebipõhine POS-süsteem, mis võimaldab baaril hallata ja müüa erine
 | **Lokaliseeritus** | UI eesti + inglise |
 | **Logimine** | JSON-structured logid (SLF4J + Logback) |
 
----
 
-_Dokumenti haldab arendusmeeskond; muudatused tehakse pull-request’idega._
 
-# studentbarPOS
