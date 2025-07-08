@@ -1,67 +1,114 @@
-# Tudengibaari POS-süsteemi projekti nõuded
 
-## 1. Eesmärk
-Luuakse veebipõhine POS-süsteem, mis võimaldab baaril hallata ja müüa erinevaid jooke (kokteilid, shotid, õlled, veinid, siidrid, toonikud, karastusjoogid jm). Süsteem peab toetama toodete täielikku elutsüklit (lisamine, muutmine, kustutamine, müügist eemaldamine / tagasikutsumine) ning dünaamilist hinnastamist vastavalt toote populaarsusele.
+# Tudengibaar
 
----
-
-## 2. Funktsionaalsed nõuded
-
-| Kirjeldus                                                                                                                |
-|--------------------------------------------------------------------------------------------------------------------------|
-| **Toote lisamine.** Kasutaja saab lisada uue toote koos kõigi vajalike väljadega.                                        |
-| **Toote muutmine.** Olemasolevat toodet saab muuta (nimi, kirjeldus, hind, staatus, kategooriad, kogus).                 |
-| **Toote kustutamine.** Kasutaja saab toote menüüst eemaldada.                                                            |
-| **Toote väljakutsumine / peitmine.** Toote saab ajutiselt müügist eemaldada ja hiljem tagasi kutsuda.                    |
-| **Dünaamiline hinnastamine.** Süsteem kohandab toote hinda automaatselt müügistatistikast arvutatud populaarsuse alusel. |
-| **Müügitehing.** Kasutaja saab toodet müüa; kogus väheneb ja tehing salvestatakse ajalukku.                              |
-| **Müügistatistika.** Admin saab vaadata, mitu ühikut igast tootest on müüdud kindla perioodi jooksul.                    |
-
-
-## 3. Andmemudel
-
-### Product
-
-| Väli | Tüüp | Kirjeldus | Piirang |
-|------|------|-----------|---------|
-| `id` | Long | Primaarvõti | PK |
-| `name` | String | Toote nimi | not null, unique |
-| `description` | String | Lühikirjeldus / koostisosad | not null |
-| `price` | BigDecimal | Hetke müügihind (€) | not null |
-| `status` | Enum(`ACTIVE`, `DRAFT`, `ARCHIVED`) | Müügistaatus | not null |
-| `quantity` | Integer | Laoseis / portsjonid | not null, ≥0 |
-| `categories` | *Many-to-many* → `Category` | Toote kategooriad | ≥1 soovituslik |
-
-### Category
-
-| Väli | Tüüp | Kirjeldus |
-|------|------|-----------|
-| `id` | Long | Primaarvõti |
-| `name` | String | Menüüsektsiooni nimi („Kokteilid“, „Õlled“…), unikaalne |
-
-### Sale (müügiajalugu)
-
-| Väli | Tüüp | Kirjeldus |
-|------|------|-----------|
-| `id` | Long | Primaarvõti |
-| `product` | FK → `Product` | Müüdud toode |
-| `priceAtSale` | BigDecimal | Hind tehingu hetkel |
-| `timestamp` | Instant | Müügikuupäev ja -aeg |
-| `quantity` | Integer | Müüdud kogus |
+Tudengibaar on dünaamiline baari POS‑lahendus, mis kohandab jookide hindu reaalajas vastavalt nende müügipopulaarsusele. Projekti eesmärk on pakkuda ülikoolisiseselt kasutatavat, kulutõhusat ja kasutajasõbralikku süsteemi, vältides kallite kommertslike POS‑platvormide rentimist.
 
 ---
 
-## 4. REST-API
+## Kiire alustamine (Docker Compose)
 
-| Verbi & tee | Kirjeldus |
-|-------------|-----------|
-| `POST /api/products` | Loo uus toode |
-| `GET /api/products` | Kõik tooted (pageable) |
-| `GET /api/products/{id}` | Üks toode detailidega |
-| `PUT /api/products/{id}` | Uuenda toodet |
-| `DELETE /api/products/{id}` | Kustuta toode |
-| `POST /api/sales` | Registreeri müük |
-| `GET /api/sales/stats?from=2025-01-01&to=2025-01-31` | Müügistatistika perioodi lõikes |
-| `POST /api/categories` | Loo kategooria |
-| `GET /api/categories` | Kõik kategooriad |
+1. Kopeeri fail `.env.example` nimega `.env` ja täida vajalikud väärtused.
+2. Käivita kogu stack (taas)ehitusega:
 
+   ```bash
+   docker compose up --build
+   ```
+3. Backend on vaikimisi saadaval `http://localhost:8080` ja frontend `http://localhost:3000` (muuda vastavalt vajadusele).
+
+---
+
+## Käivitamine Maven‑projektina
+
+1. Veendu, et sul on paigaldatud **Java 17+** ja **Maven**.
+2. Ekspordi samad keskkonnamuutujad nagu `.env`‑failis.
+3. Ehita ja käivita rakendus:
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+---
+
+### Näidis `.env.example`
+
+```env
+# ---------- PostgreSQL (Docker) ----------
+POSTGRES_DB=your_db
+POSTGRES_USER=your_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_PORT=5432
+
+# ---------- Spring Boot ----------
+# JDBC URL – use service name (my-postgres) inside Docker network
+SPRING_DATASOURCE_URL=jdbc:postgresql://my-postgres:5432/${POSTGRES_DB}
+SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+# JPA / Hibernate
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SPRING_JPA_SHOW_SQL=true
+SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+
+# JWT
+JWT_SECRET=change_me
+
+# Front‑end CORS origin
+FRONTEND_URL=http://localhost:3000
+
+# (optional) verbose error messages while developing
+SERVER_ERROR_INCLUDE_MESSAGE=always
+SERVER_ERROR_INCLUDE_BINDING_ERRORS=always
+```
+
+
+---
+
+## Näidiskonfiguratsioonid
+
+**`application.yml`**
+
+```yaml
+server:
+  error:
+    include-message: always        # show full error text
+    include-binding-errors: always # show validation errors
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}   # matches container env
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  show-sql: true
+```
+
+**`docker-compose.yml`**
+
+```yaml
+services:
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+
+
+Copyright © 2025 [Kristofer Metusala]. All rights reserved.
