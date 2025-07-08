@@ -9,7 +9,6 @@ import exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -29,6 +28,7 @@ public class ProductService {
         if (productRepository.findByName(dto.getName()).isPresent()) {
             throw new IllegalArgumentException("Product already exists");
         }
+
 
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
@@ -58,5 +58,10 @@ public class ProductService {
         return productRepository.save(existing);
     }
 
+    public void delete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        productRepository.delete(product);
+    }
 
 }

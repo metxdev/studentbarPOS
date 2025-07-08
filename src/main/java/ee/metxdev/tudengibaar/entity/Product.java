@@ -21,6 +21,9 @@ public class Product {
 
     private double price;
 
+    @Column(nullable = false)
+    private Long salesCount = 0L;
+
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;

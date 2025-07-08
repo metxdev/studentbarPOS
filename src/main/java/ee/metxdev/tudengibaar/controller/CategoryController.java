@@ -1,6 +1,9 @@
 package ee.metxdev.tudengibaar.controller;
 
+import ee.metxdev.tudengibaar.DTO.CategoryDto;
+import ee.metxdev.tudengibaar.DTO.ProductDto;
 import ee.metxdev.tudengibaar.entity.Category;
+import ee.metxdev.tudengibaar.entity.Product;
 import ee.metxdev.tudengibaar.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,17 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public Category create(@RequestBody Category body) {
         return categoryService.save(body);
+    }
+
+    @PutMapping("/{id}")
+    public Category update(@PathVariable Long id, @RequestBody CategoryDto dto) {
+        return categoryService.update(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
     }
 
 }

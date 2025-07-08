@@ -1,12 +1,12 @@
 package ee.metxdev.tudengibaar.service;
 
+import ee.metxdev.tudengibaar.DTO.CategoryDto;
 import ee.metxdev.tudengibaar.entity.Category;
 import ee.metxdev.tudengibaar.repository.CategoryRepository;
-import exception.DuplicateCategoryException;
+import exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 
@@ -27,6 +27,21 @@ public class CategoryService {
             throw new IllegalArgumentException("Category already exists");
         }
         return categoryRepository.save(body);
+    }
+
+    public Category update(Long id, CategoryDto dto) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
+
+        category.setName(dto.getName());
+        return category;
+    }
+
+    public Category delete(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
+        categoryRepository.findById(id);
+        return category;
     }
 
 }
