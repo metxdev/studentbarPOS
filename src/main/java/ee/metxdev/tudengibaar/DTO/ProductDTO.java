@@ -3,7 +3,7 @@ package ee.metxdev.tudengibaar.DTO;
 import lombok.Data;
 
 @Data
-public class ProductDto {
+public class ProductDTO {
     private String name;
     private String description;
     private double price;

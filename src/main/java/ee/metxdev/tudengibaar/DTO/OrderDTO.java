@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrderDto {
-    private List<OrderItemDto> items;
+public class OrderDTO {
+    private List<OrderItemDTO> items;
 }

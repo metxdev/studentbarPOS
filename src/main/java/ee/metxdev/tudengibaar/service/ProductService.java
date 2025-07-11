@@ -1,6 +1,6 @@
 package ee.metxdev.tudengibaar.service;
 
-import ee.metxdev.tudengibaar.DTO.ProductDto;
+import ee.metxdev.tudengibaar.DTO.ProductDTO;
 import ee.metxdev.tudengibaar.entity.Category;
 import ee.metxdev.tudengibaar.entity.Product;
 import ee.metxdev.tudengibaar.repository.CategoryRepository;
@@ -24,7 +24,7 @@ public class ProductService {
        return productRepository.findAll();
     }
 
-    public Product save(ProductDto dto) {
+    public Product save(ProductDTO dto) {
         if (productRepository.findByName(dto.getName()).isPresent()) {
             throw new IllegalArgumentException("Product already exists");
         }
@@ -42,7 +42,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product update(Long id, ProductDto dto) {
+    public Product update(Long id, ProductDTO dto) {
         Product existing = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 

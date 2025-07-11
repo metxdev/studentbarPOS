@@ -1,6 +1,6 @@
 package ee.metxdev.tudengibaar.controller;
 
-import ee.metxdev.tudengibaar.DTO.OrderDto;
+import ee.metxdev.tudengibaar.DTO.OrderDTO;
 import ee.metxdev.tudengibaar.entity.Order;
 import ee.metxdev.tudengibaar.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +23,12 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Order create(@RequestBody OrderDto orderDto) {
+    public Order create(@RequestBody OrderDTO orderDto) {
         return orderService.save(orderDto);
     }
 
     @PutMapping("/{id}")
-    public Order update(@PathVariable Long id, @RequestBody OrderDto dto) {
+    public Order update(@PathVariable Long id, @RequestBody OrderDTO dto) {
         return orderService.update(id, dto);
     }
 

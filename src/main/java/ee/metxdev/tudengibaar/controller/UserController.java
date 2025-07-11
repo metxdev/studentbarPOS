@@ -1,6 +1,7 @@
 package ee.metxdev.tudengibaar.controller;
 
-import ee.metxdev.tudengibaar.DTO.UserDto;
+import ee.metxdev.tudengibaar.DTO.CreateUserDTO;
+import ee.metxdev.tudengibaar.DTO.UserDTO;
 import ee.metxdev.tudengibaar.entity.User;
 import ee.metxdev.tudengibaar.service.RoleService;
 import ee.metxdev.tudengibaar.service.UserService;
@@ -23,17 +24,18 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody @Valid User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid CreateUserDTO user) {
+        UserDTO savedUsed = userService.createUser(user);
+        return ResponseEntity.ok(savedUsed);
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

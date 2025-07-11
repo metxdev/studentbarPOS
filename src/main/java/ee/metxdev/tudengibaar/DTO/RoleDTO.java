@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDto {
+public class RoleDTO {
     private Long roleId;
     private String name;
 }

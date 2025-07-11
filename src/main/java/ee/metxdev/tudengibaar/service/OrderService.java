@@ -1,6 +1,6 @@
 package ee.metxdev.tudengibaar.service;
 
-import ee.metxdev.tudengibaar.DTO.OrderDto;
+import ee.metxdev.tudengibaar.DTO.OrderDTO;
 import ee.metxdev.tudengibaar.entity.Order;
 import ee.metxdev.tudengibaar.entity.OrderItem;
 import ee.metxdev.tudengibaar.entity.Product;
@@ -30,7 +30,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order save(OrderDto dto) {
+    public Order save(OrderDTO dto) {
         if (dto.getItems() == null || dto.getItems().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order must contain at least one item");
         }
@@ -68,7 +68,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order update(Long id, OrderDto dto) {
+    public Order update(Long id, OrderDTO dto) {
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 

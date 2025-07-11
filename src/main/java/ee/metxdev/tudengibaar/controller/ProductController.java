@@ -1,6 +1,6 @@
 package ee.metxdev.tudengibaar.controller;
 
-import ee.metxdev.tudengibaar.DTO.ProductDto;
+import ee.metxdev.tudengibaar.DTO.ProductDTO;
 import ee.metxdev.tudengibaar.entity.Product;
 import ee.metxdev.tudengibaar.service.OrderService;
 import ee.metxdev.tudengibaar.service.ProductService;
@@ -26,13 +26,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody ProductDto body) {
+    public Product create(@RequestBody ProductDTO body) {
         return productService.save(body);
     }
 
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody ProductDto dto) {
+    public Product update(@PathVariable Long id, @RequestBody ProductDTO dto) {
         return productService.update(id ,dto);
     }
 

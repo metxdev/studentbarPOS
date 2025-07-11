@@ -1,6 +1,6 @@
 package ee.metxdev.tudengibaar.service;
 
-import ee.metxdev.tudengibaar.DTO.CategoryDto;
+import ee.metxdev.tudengibaar.DTO.CategoryDTO;
 import ee.metxdev.tudengibaar.entity.Category;
 import ee.metxdev.tudengibaar.repository.CategoryRepository;
 import exception.CategoryNotFoundException;
@@ -29,7 +29,7 @@ public class CategoryService {
         return categoryRepository.save(body);
     }
 
-    public Category update(Long id, CategoryDto dto) {
+    public Category update(Long id, CategoryDTO dto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 

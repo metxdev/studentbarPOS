@@ -5,10 +5,10 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
     private Long userId;
     private String email;
     private String firstName;
     private String lastName;
-    private String roleName; // Only expose the name of the role
+    private String roleName;
 }
