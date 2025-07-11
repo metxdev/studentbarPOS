@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +36,6 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order must contain at least one item");
         }
 
-
         Order order = new Order();
         order.setCreatedAt(LocalDateTime.now());
 
@@ -43,28 +43,25 @@ public class OrderService {
             Product product = productRepo.findById(itemDto.getProductId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
 
-            Long currentSales = product.getSalesCount() != null ? product.getSalesCount() : 0L;
-            product.setSalesCount(currentSales + itemDto.getQuantity());
-
-            // Update product sales count
-            product.setSalesCount(product.getSalesCount() + itemDto.getQuantity());
+            product.setSalesCount((product.getSalesCount() == null ? 0L : product.getSalesCount()) + itemDto.getQuantity());
             productRepo.save(product);
 
             OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setQuantity(itemDto.getQuantity());
-            item.setOrder(order); // set back-reference
+            item.setOrder(order);
             return item;
-        }).collect(Collectors.toList());
+        }).toList();
 
         order.setItems(items);
 
-        double total = items.stream()
-                .mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity())
-                .sum();
-        order.setTotal(total);
+        var total = items.stream()
+                .map(i -> i.getProduct().getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return orderRepo.save(order); // cascades and saves items
+        order.setTotal(total.doubleValue());
+
+        return orderRepo.save(order);
     }
 
     @Transactional
@@ -87,10 +84,11 @@ public class OrderService {
 
         order.setItems(items);
 
-        double total = items.stream()
-                .mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity())
-                .sum();
-        order.setTotal(total);
+        var total = items.stream()
+                .map(i -> i.getProduct().getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        order.setTotal(total.doubleValue());
 
         return orderRepo.save(order);
     }

@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "PRODUCT")
+@Table(name = "products",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"name", "category_id"}))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +22,7 @@ public class Product {
 
     private String description;
 
-    private double price;
+    private BigDecimal price;
 
     @Column(nullable = false)
     private Long salesCount = 0L;

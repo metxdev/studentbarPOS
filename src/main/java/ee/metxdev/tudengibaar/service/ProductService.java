@@ -1,8 +1,11 @@
 package ee.metxdev.tudengibaar.service;
 
+import ee.metxdev.tudengibaar.DTO.CreateProductDTO;
 import ee.metxdev.tudengibaar.DTO.ProductDTO;
+import ee.metxdev.tudengibaar.DTO.UpdateProductDTO;
 import ee.metxdev.tudengibaar.entity.Category;
 import ee.metxdev.tudengibaar.entity.Product;
+import ee.metxdev.tudengibaar.mappers.ProductMapper;
 import ee.metxdev.tudengibaar.repository.CategoryRepository;
 import ee.metxdev.tudengibaar.repository.ProductRepository;
 import exception.ProductNotFoundException;
@@ -20,12 +23,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepo;
 
-    public List<Product> findAll() {
-       return productRepository.findAll();
+    public List<ProductDTO> findAll() {
+       return productRepository.findAll()
+               .stream()
+               .map(ProductMapper::toDTO)
+               .toList();
     }
 
-    public Product save(ProductDTO dto) {
-        if (productRepository.findByName(dto.getName()).isPresent()) {
+    public ProductDTO save(CreateProductDTO dto) {
+        if (productRepository.findByNameAndCategory_Id(dto.getName(), dto.getCategoryId()).isPresent()) {
             throw new IllegalArgumentException("Product already exists");
         }
 
@@ -33,19 +39,16 @@ public class ProductService {
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setPrice(dto.getPrice());
+        Product product = ProductMapper.toEntity(dto);
         product.setCategory(category);
 
-        return productRepository.save(product);
+        Product saved = productRepository.save(product);
+        return ProductMapper.toDTO(saved);
     }
 
-    public Product update(Long id, ProductDTO dto) {
+    public ProductDTO update(Long id, UpdateProductDTO dto) {
         Product existing = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-
 
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
@@ -55,7 +58,8 @@ public class ProductService {
         existing.setPrice(dto.getPrice());
         existing.setCategory(category);
 
-        return productRepository.save(existing);
+        Product saved = productRepository.save(existing);
+        return ProductMapper.toDTO(saved);
     }
 
     public void delete(Long id) {
