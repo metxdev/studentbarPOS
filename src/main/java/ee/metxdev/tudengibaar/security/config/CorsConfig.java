@@ -1,4 +1,4 @@
-package ee.metxdev.tudengibaar.config;
+package ee.metxdev.tudengibaar.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
